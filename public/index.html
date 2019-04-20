@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jake: JavaScript build tool task runner for NodeJS</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- The HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <script src="/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/bootstrap.responsive.css" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/highlight/zenburn.css" rel="stylesheet" />
+  </head>
+
+
+  <body>
+    <div class="container">
+
+      <div class="row">
+        <div class="span1"></div>
+        <div class="span2">
+
+        </div>
+        <div class="span6">
+
+  <ul class="nav" style="
+  height: 56px;
+  list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 24px;
+  ">
+    <li><a href="/" class="selected">home</a></li>
+		|
+    <li><a href="https://github.com/jakejs/jake">code</a></li>
+  </ul>
+
+
+        </div>
+        <div class="span2">
+
+        </div>
+        <div class="span1"></div>
+      </div>
+
+
+      <div class="row">
+        <div class="span1"></div>
+        <div class="span10">
+          <h2
+style="
+  padding-top: 16px;
+  padding-bottom: 8px;
+  color: #3f3f3f;
+  font-family: Superclarendon; font-size: 160px; line-height: 140px;
+  letter-spacing: -5px;
+">Jake</h2>
+  <image src="/img/cowboy_hat.png" width="288" height="182" alt="Cowboy hat" style="
+  width: 288px;
+  height: 182px;
+  display: inline-block;
+  padding-bottom: 8px;
+  "
+  />
+  <h3
+style="
+  padding-top: 24px;
+  padding-bottom: 4px;
+  color: #3f3f3f;
+  font-family: Superclarendon; font-size: 56px; line-height: 56px;
+  letter-spacing: -1px;
+  ">JavaScript build tool</h3>
+
+<div style="text-align: left;">
+
+</div>
+
+        </div>
+        <div class="span1"></div>
+      </div>
+
+
+      <div class="row">
+        <div class="span1"></div>
+        <div class="span10">
+          <div style="text-align: left; overflow: auto; padding-top: 24px;">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#overview">Overview</a>
+<ul>
+<li><a href="#overview_installing_with__npm">Installing with NPM</a>
+</li><li><a href="#overview_windows,_installing_from_source">Windows, installing from source</a>
+</li><li><a href="#overview_basic_usage">Basic usage</a>
+</li><li><a href="#overview_description">Description</a>
+</li><li><a href="#overview_options">Options</a>
+</li><li><a href="#overview_jakefile_syntax">Jakefile syntax</a>
+</li></ul>
+</li><li><a href="#tasks">Tasks</a>
+<ul>
+<li><a href="#tasks_file-tasks">File-tasks</a>
+</li><li><a href="#tasks_directory-tasks">Directory-tasks</a>
+</li><li><a href="#tasks_namespaces">Namespaces</a>
+</li><li><a href="#tasks_rules">Rules</a>
+<ul>
+<li><a href="#tasks_rules_regex_patterns">Regex patterns</a>
+</li><li><a href="#tasks_rules_source_files_from_functions">Source files from functions</a>
+</li></ul>
+</li><li><a href="#tasks_passing_parameters_to_jake">Passing parameters to jake</a>
+</li><li><a href="#tasks_cleanup_after_all_tasks_run,_jake_'complete'_event">Cleanup after all tasks run, jake 'complete' event</a>
+</li><li><a href="#tasks_running_tasks_from_within_other_tasks">Running tasks from within other tasks</a>
+</li><li><a href="#tasks_getting_values_out_of_tasks">Getting values out of tasks</a>
+</li><li><a href="#tasks_managing_asynchrony_without_prereqs_(eg.,_when_using_`invoke`)">Managing asynchrony without prereqs (e.g., when using `invoke`)</a>
+</li><li><a href="#tasks_evented_tasks">Evented tasks</a>
+</li><li><a href="#tasks_aborting_a_task">Aborting a task</a>
+</li><li><a href="#tasks_running_prerequisites_in_parallel">Running prerequisites in parallel</a>
+</li><li><a href="#tasks_showing_the_list_of_tasks">Showing the list of tasks</a>
+</li></ul>
+</li><li><a href="#breaking_things_up_into_multiple_files">Breaking things up into multiple files</a>
+</li><li><a href="#file-utils">File-utils</a>
+</li><li><a href="#running_shell-commands:_`jakeexec`_and_`jake.create_exec`">Running shell-commands: `jake.exec` and `jake.createExec`</a>
+<ul>
+<li><a href="#running_shell-commands:_`jakeexec`_and_`jake.create_exec`_`jakeexec`">`jake.exec`</a>
+</li><li><a href="#running_shell-commands:_`jakeexec`_and_`jake.create_exec`_`jakecreate_exec`_and_the_evented__exec_object">`jake.createExec` and the evented Exec object</a>
+</li></ul>
+</li><li><a href="#logging_and_output">Logging and output</a>
+</li><li><a href="#file_list">FileList</a>
+</li><li><a href="#package_task">PackageTask</a>
+<ul>
+<li><a href="#package_task_package_task_instance-property_options">PackageTask instance-property options</a>
+</li><li><a href="#package_task_windows-specific_warning">Windows-specific warning</a>
+</li></ul>
+</li><li><a href="#test_task">TestTask</a>
+</li><li><a href="#watch_task">WatchTask</a>
+</li><li><a href="#publish_task">PublishTask</a>
+</li><li><a href="#coffee_script__jakefiles">CoffeeScript Jakefiles</a>
+</li><li><a href="#live_script__jakefiles">LiveScript Jakefiles</a>
+</li><li><a href="#related_projects">Related projects</a>
+</li><li><a href="#license">License</a>
+</li></ul>
+</li>
+<p><a name="overview"></a></p>
+<h2 id="overview">Overview</h2>
+<p>Jake is the JavaScript build tool for NodeJS. Jake has been
+around since the very early days of Node, and is very full
+featured and well tested.</p>
+<p><a name="overview_installing_with__npm"></a></p>
+<h3 id="installing-with-npm">Installing with NPM</h3>
+<p>Install globally with:</p>
+<pre><code>npm install -g jake
+</code></pre><p>Or you may also install it as a development dependency in a package.json file:</p>
+<pre><code><span class="comment">// package.json</span>
+&quot;devDependencies&quot;: {
+  &quot;jake&quot;: &quot;latest&quot;
+}
+</code></pre><p>Then install it with <code>npm install</code></p>
+<p>Note Jake is intended to be mostly a command-line tool, but lately there have been
+changes to it so it can be either embedded, or run from inside your project.</p>
+<p><a name="overview_windows,_installing_from_source"></a></p>
+<h3 id="windows-installing-from-source">Windows, installing from source</h3>
+<p>For Windows users installing from source, there are some additional steps.</p>
+<p><em>Assumed: current directory is the same directory where node.exe is present.</em></p>
+<p>Get Jake:</p>
+<pre><code>git <span class="keyword">clone</span> git:<span class="comment">//github.com/mde/jake.git node_modules/jake</span>
+</code></pre><p>Copy jake.bat and jake to the same directory as node.exe</p>
+<pre><code>copy node_modules/jake/jake.bat jake.bat
+copy node_modules/jake/jake jake
+</code></pre><p>Add the directory of node.exe to the environment PATH variable.</p>
+<p><a name="overview_basic_usage"></a></p>
+<h3 id="basic-usage">Basic usage</h3>
+<pre><code>jake [options ...] [env variables ...] target
+</code></pre><p><a name="overview_description"></a></p>
+<h3 id="description">Description</h3>
+<pre><code>Jake is a simple JavaScript build program with capabilities similar to the
+regular make <span class="keyword">or</span> rake command.
+
+Jake has the following features:
+    * Jakefiles are in standard JavaScript syntax
+    * Tasks with prerequisites
+    * Namespaces <span class="keyword">for</span> tasks
+    * Async task execution
+</code></pre><p><a name="overview_options"></a></p>
+<h3 id="options">Options</h3>
+<pre><code>-V/v
+--version                   Display the Jake version.
+
+-h
+--help                      Display help message.
+
+-f *FILE*
+--jakefile *FILE*           <span class="keyword">Use</span> FILE <span class="keyword">as</span> the Jakefile.
+
+-C *DIRECTORY*
+--directory *DIRECTORY*     Change to DIRECTORY before running tasks.
+
+-q
+--quiet                     <span class="keyword">Do</span> not log messages to standard output.
+
+-J *JAKELIBDIR*
+--jakelibdir *JAKELIBDIR*   Auto-import any .jake files in JAKELIBDIR.
+                            (<span class="keyword">default</span> is <span class="string">'jakelib'</span>)
+
+-B
+--always-make               Unconditionally make all targets.
+
+-t
+--trace                     Enable full backtrace.
+
+-T/ls
+--tasks                     Display the tasks (matching optional PATTERN)
+                            with descriptions, then <span class="keyword">exit</span>.
+</code></pre><p><a name="overview_jakefile_syntax"></a></p>
+<h3 id="jakefile-syntax">Jakefile syntax</h3>
+<p>A Jakefile is just executable JavaScript. You can include whatever JavaScript
+you want in it.</p>
+<p><a name="tasks"></a></p>
+<h2 id="tasks">Tasks</h2>
+<p>Use <code>task</code> to define tasks. It has one required argument, the task-name, and
+three optional arguments:</p>
+<pre><code class="lang-javascript">task(name, [prerequisites], [action], [opts]);
+</code></pre>
+<p>The <code>name</code> argument is a String with the name of the task, and <code>prerequisites</code>
+is an optional Array arg of the list of prerequisite tasks to perform first.</p>
+<p>The <code>action</code> is a Function defining the action to take for the task. (Note that
+Object-literal syntax for name/prerequisites in a single argument a la Rake is
+also supported, but JavaScript's lack of support for dynamic keys in Object
+literals makes it not very useful.) The action is invoked with the Task object
+itself as the execution context (i.e, &quot;this&quot; inside the action references the
+Task object).</p>
+<p>The <code>opts</code> argument is the normal JavaScript-style 'options' object. When a
+task's operations are asynchronous, the <code>async</code> property should be set to
+<code><span class="keyword">true</span></code>, and the task must call <code>complete()</code> to signal to Jake that the task is
+done, and execution can proceed. By default the <code>async</code> property is <code><span class="keyword">false</span></code>.</p>
+<p>Tasks created with <code>task</code> are always executed when asked for (or are a
+prerequisite). Tasks created with <code>file</code> are only executed if no file with the
+given name exists or if any of its file-prerequisites are more recent than the
+file named by the task. Also, if any prerequisite is a regular task, the file
+task will always be executed.</p>
+<p>Use <code>desc</code> to add a string description of the task.</p>
+<p>Here's an example:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This is the default task.'</span>);
+task(<span class="string">'default'</span>, <span class="keyword">function</span> (params) {
+  console.log(<span class="string">'This is the default task.'</span>);
+});
+
+desc(<span class="string">'This task has prerequisites.'</span>);
+task(<span class="string">'hasPrereqs'</span>, [<span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'baz'</span>], <span class="keyword">function</span> (params) {
+  console.log(<span class="string">'Ran some prereqs first.'</span>);
+});
+</code></pre>
+<p>And here's an example of an asynchronous task:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This is an asynchronous task.'</span>);
+task(<span class="string">'asyncTask'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  setTimeout(complete, <span class="number">1000</span>);
+});
+</code></pre>
+<p>A Task is also an EventEmitter which emits the 'start' event when it begins to
+run, and the 'complete' event when it is finished. This allows asynchronous
+tasks to be run from within other tasks via either <code>invoke</code> or <code>execute</code>, and
+ensures they will complete before the rest of the containing task executes. See
+the section &quot;Running tasks from within other tasks,&quot; below.</p>
+<p><a name="tasks_file-tasks"></a></p>
+<h3 id="file-tasks">File-tasks</h3>
+<p>Create a file-task by calling <code>file</code>.</p>
+<p>File-tasks create a file from one or more other files. With a file-task, Jake
+checks both that the file exists, and also that it is not older than the files
+specified by any prerequisite tasks. File-tasks are particularly useful for
+compiling something from a tree of source files.</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This builds a minified JS file for production.'</span>);
+file(<span class="string">'foo-minified.js'</span>, [<span class="string">'bar'</span>, <span class="string">'foo-bar.js'</span>, <span class="string">'foo-baz.js'</span>], <span class="keyword">function</span> () {
+  <span class="comment">// Code to concat and minify goes here</span>
+});
+</code></pre>
+<p><a name="tasks_directory-tasks"></a></p>
+<h3 id="directory-tasks">Directory-tasks</h3>
+<p>Create a directory-task by calling <code>directory</code>.</p>
+<p>Directory-tasks create a directory for use with for file-tasks. Jake checks for
+the existence of the directory, and only creates it if needed.</p>
+<pre><code class="lang-javascript">desc('This creates the bar directory for use with the foo-minified.js file-task.');
+directory('bar');
+</code></pre>
+<p>This task will create the directory when used as a prerequisite for a file-task,
+or when run from the command-line.</p>
+<p><a name="tasks_namespaces"></a></p>
+<h3 id="namespaces">Namespaces</h3>
+<p>Use <code><span class="keyword">namespace</span></code> to create a namespace of tasks to perform. Call it with two arguments:</p>
+<pre><code class="lang-javascript"><span class="keyword">namespace</span>(name, namespaceTasks);
+</code></pre>
+<p>Where is <code>name</code> is the name of the namespace, and <code>namespaceTasks</code> is a function
+with calls inside it to <code>task</code> or <code>desc</code> defining all the tasks for that
+namespace.</p>
+<p>Here's an example:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This is the default task.'</span>);
+task(<span class="string">'default'</span>, <span class="keyword">function</span> () {
+  console.log(<span class="string">'This is the default task.'</span>);
+});
+
+<span class="keyword">namespace</span>(<span class="string">'foo'</span>, <span class="keyword">function</span> () {
+  desc(<span class="string">'This the foo:bar task'</span>);
+  task(<span class="string">'bar'</span>, <span class="keyword">function</span> () {
+    console.log(<span class="string">'doing foo:bar task'</span>);
+  });
+
+  desc(<span class="string">'This the foo:baz task'</span>);
+  task(<span class="string">'baz'</span>, [<span class="string">'default'</span>, <span class="string">'foo:bar'</span>], <span class="keyword">function</span> () {
+    console.log(<span class="string">'doing foo:baz task'</span>);
+  });
+
+});
+</code></pre>
+<p>In this example, the foo:baz task depends on the default and foo:bar tasks.</p>
+<p><a name="tasks_rules"></a></p>
+<h3 id="rules">Rules</h3>
+<p>When you add a filename as a prerequisite for a task, but there is not a 
+file-task defined for it, Jake can create file-tasks on the fly from Rules.</p>
+<p>Here's an example:</p>
+<pre><code class="lang-javascript">rule(<span class="string">'.o'</span>, <span class="string">'.c'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> cmd = <span class="string">'cc '</span> + <span class="keyword">this</span>.source + <span class="string">' -c -o '</span> + <span class="keyword">this</span>.name;
+  jake.exec(cmd, <span class="keyword">function</span> () {
+    complete();
+  });
+});
+</code></pre>
+<p>This rule will take effect for any task-name that ends in '.o', but will require
+the existence of a prerequisite source file with the same name ending in '.c'.</p>
+<p>For example, with this rule, if you reference a task 'foobarbaz.o' as a
+prerequisite somewhere in one of your Jake tasks, rather than complaining about
+this file not existing, or the lack of a task with that name, Jake will
+automatically create a FileTask for 'foobarbaz.o' with the action specified in
+the rule you've defined. (The usual action would be to create 'foobarbaz.o' from
+'foobarbaz.c'). If 'foobarbaz.c' does not exist, it will recursively attempt
+synthesize a viable rule for it as well.</p>
+<p><a name="tasks_rules_regex_patterns"></a></p>
+<h4 id="regex-patterns">Regex patterns</h4>
+<p>You can use regular expressions to match file extensions as well:</p>
+<pre><code class="lang-javascript">rule(/\.o$/, <span class="string">'.c'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> cmd = <span class="string">'cc '</span> + <span class="keyword">this</span>.source + <span class="string">' -c -o '</span> + <span class="keyword">this</span>.name;
+  jake.exec(cmd, <span class="keyword">function</span> () {
+    complete();
+  });
+});
+</code></pre>
+<p><a name="tasks_rules_source_files_from_functions"></a></p>
+<h4 id="source-files-from-functions">Source files from functions</h4>
+<p>You can also use a function to calculate the name of the desired source-file to
+use, instead of assuming simple suffix-substitution:</p>
+<pre><code class="lang-javascript"><span class="comment">// Match .less.css or .scss.css and run appropriate preprocessor</span>
+<span class="keyword">var</span> getSourceFilename = <span class="keyword">function</span> (name) {
+  <span class="comment">// Strip off the extension for the filename</span>
+  <span class="keyword">return</span> name.replace(/\.css$/, <span class="string">''</span>);
+};
+rule(/\.\w{<span class="number">2</span>,<span class="number">4</span>}\.css$/, getSourceFilename, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="comment">// Get appropriate preprocessor for this.source, e.g., foo.less</span>
+  <span class="comment">// Generate a file with filename of this.name, e.g., foo.less.css</span>
+});
+</code></pre>
+<p><a name="tasks_passing_parameters_to_jake"></a></p>
+<h3 id="passing-parameters-to-jake">Passing parameters to jake</h3>
+<p>Parameters can be passed to Jake two ways: plain arguments, and environment
+variables.</p>
+<p>To pass positional arguments to the Jake tasks, enclose them in square braces,
+separated by commas, after the name of the task on the command-line. For
+example, with the following Jakefile:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This is an awesome task.'</span>);
+task(<span class="string">'awesome'</span>, <span class="keyword">function</span> (a, b, c) {
+  console.log(a, b, c);
+});
+</code></pre>
+<p>You could run <code>jake</code> like this:</p>
+<pre><code>jake awesome[foo,bar,baz]
+</code></pre><p>And you'd get the following output:</p>
+<pre><code>foo bar baz
+</code></pre><p>Note that you <em>cannot</em> uses spaces between the commas separating the parameters.</p>
+<p>Any parameters passed after the Jake task that contain an equals sign (=) will
+be added to process.env.</p>
+<p>With the following Jakefile:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This is an awesome task.'</span>);
+task(<span class="string">'awesome'</span>, <span class="keyword">function</span> (a, b, c) {
+  console.log(a, b, c);
+  console.log(process.env.qux, process.env.frang);
+});
+</code></pre>
+<p>You could run <code>jake</code> like this:</p>
+<pre><code>jake awesome[foo,bar,baz] qux=zoobie frang=asdf
+</code></pre><p>And you'd get the following output:</p>
+<pre><code>foo bar baz
+zoobie asdf
+</code></pre><p>Running <code>jake</code> with no arguments runs the default task.</p>
+<p><strong>Note for zsh users</strong> : you will need to escape the brackets or wrap in single
+quotes like this to pass parameters :</p>
+<pre><code>jake 'awesome[foo,bar,baz]'
+</code></pre><p>An other solution is to deactivate permanently file-globbing for the <code>jake</code>
+command. You can do this by adding this line to your <code>.zshrc</code> file :</p>
+<pre><code>alias jake=&quot;noglob jake&quot;
+</code></pre><p><a name="tasks_cleanup_after_all_tasks_run,_jake_'complete'_event"></a></p>
+<h3 id="cleanup-after-all-tasks-run-jake-complete-event">Cleanup after all tasks run, jake 'complete' event</h3>
+<p>The base 'jake' object is an EventEmitter, and fires a 'start' event before
+running, an 'error' event after an uncaught exception, and a 'complete' event after running all tasks.</p>
+<p>This is sometimes useful when a task starts a process which keeps the Node
+event-loop running (e.g., a database connection). If you know you want to stop
+the running Node process after all tasks have finished, you can set a listener
+for the 'complete' event, like so:</p>
+<pre><code class="lang-javascript">jake.addListener(<span class="string">'complete'</span>, <span class="keyword">function</span> () {
+  process.<span class="keyword">exit</span>();
+});
+</code></pre>
+<p><a name="tasks_running_tasks_from_within_other_tasks"></a></p>
+<h3 id="running-tasks-from-within-other-tasks">Running tasks from within other tasks</h3>
+<p>Jake supports the ability to run a task from within another task via the
+<code>invoke</code> and <code>execute</code> methods.</p>
+<p>The <code>invoke</code> method will run the desired task, along with its prerequisites:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Calls the foo:bar task and its prerequisites.'</span>);
+task(<span class="string">'invokeFooBar'</span>, <span class="keyword">function</span> () {
+  <span class="comment">// Calls foo:bar and its prereqs</span>
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+});
+</code></pre>
+<p>The <code>invoke</code> method will only run the task once, even if you call it repeatedly.</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Calls the foo:bar task and its prerequisites.'</span>);
+task(<span class="string">'invokeFooBar'</span>, <span class="keyword">function</span> () {
+  <span class="comment">// Calls foo:bar and its prereqs</span>
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+  <span class="comment">// Does nothing</span>
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+});
+</code></pre>
+<p>The <code>execute</code> method will run the desired task without its prerequisites:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Calls the foo:bar task without its prerequisites.'</span>);
+task(<span class="string">'executeFooBar'</span>, <span class="keyword">function</span> () {
+  <span class="comment">// Calls foo:bar without its prereqs</span>
+  jake.Task[<span class="string">'foo:baz'</span>].execute();
+});
+</code></pre>
+<p>Calling <code>execute</code> repeatedly will run the desired task repeatedly.</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Calls the foo:bar task without its prerequisites.'</span>);
+task(<span class="string">'executeFooBar'</span>, <span class="keyword">function</span> () {
+  <span class="comment">// Calls foo:bar without its prereqs</span>
+  jake.Task[<span class="string">'foo:baz'</span>].execute();
+  <span class="comment">// Can keep running this over and over</span>
+  jake.Task[<span class="string">'foo:baz'</span>].execute();
+  jake.Task[<span class="string">'foo:baz'</span>].execute();
+});
+</code></pre>
+<p>If you want to run the task and its prerequisites more than once, you can use
+<code>invoke</code> with the <code>reenable</code> method.</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Calls the foo:bar task and its prerequisites.'</span>);
+task(<span class="string">'invokeFooBar'</span>, <span class="keyword">function</span> () {
+  <span class="comment">// Calls foo:bar and its prereqs</span>
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+  <span class="comment">// Does nothing</span>
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+  <span class="comment">// Only re-runs foo:bar, but not its prerequisites</span>
+  jake.Task[<span class="string">'foo:bar'</span>].reenable();
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+});
+</code></pre>
+<p>The <code>reenable</code> method takes a single Boolean arg, a 'deep' flag, which reenables
+the task's prerequisites if set to true.</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Calls the foo:bar task and its prerequisites.'</span>);
+task(<span class="string">'invokeFooBar'</span>, <span class="keyword">function</span> () {
+  <span class="comment">// Calls foo:bar and its prereqs</span>
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+  <span class="comment">// Does nothing</span>
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+  <span class="comment">// Re-runs foo:bar and all of its prerequisites</span>
+  jake.Task[<span class="string">'foo:bar'</span>].reenable(<span class="keyword">true</span>);
+  jake.Task[<span class="string">'foo:bar'</span>].invoke();
+});
+</code></pre>
+<p>It's easy to pass params on to a sub-task run via <code>invoke</code> or <code>execute</code>:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Passes params on to other tasks.'</span>);
+task(<span class="string">'passParams'</span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> t = jake.Task[<span class="string">'foo:bar'</span>];
+  <span class="comment">// Calls foo:bar, passing along current args</span>
+  t.invoke.apply(t, arguments);
+});
+</code></pre>
+<p><a name="tasks_getting_values_out_of_tasks"></a></p>
+<h3 id="getting-values-out-of-tasks">Getting values out of tasks</h3>
+<p>Passing a value to the <code>complete</code> function for async tasks (or simply returning
+a value from sync tasks) will set a 'value' property on the completed task. This
+same value will also be passed as the task emits its 'complete' event.</p>
+<p>After a task is completed, this value will be also available in the '.value'
+property on the task. Calling <code>reenable</code> on the task will clear this value.</p>
+<pre><code class="lang-javascript">task(<span class="string">'environment'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="comment">// Do some sort of I/O to figure out the environment value</span>
+  doSomeAsync(<span class="keyword">function</span> (err, val) {
+    <span class="keyword">if</span> (err) { <span class="keyword">throw</span> err }
+    complete(val);
+  });
+});
+
+task(&quot;someTaskWithEnvViaPrereq&quot;, [&quot;envrionment&quot;], <span class="keyword">function</span> () {
+  api = jake.Task[&quot;envrionment&quot;].value;
+  console.log(api);
+});
+
+task(&quot;someTaskWithEnvViaInvoke&quot;, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> env = jake.Task[&quot;envrionment&quot;];
+  env.addListener(<span class="string">'complete'</span>, <span class="keyword">function</span> (api) {
+    console.log(api);
+    complete();
+  });
+  env.invoke();
+});
+</code></pre>
+<p><a name="tasks_managing_asynchrony_without_prereqs_(eg.,_when_using_`invoke`)"></a></p>
+<h3 id="managing-asynchrony-without-prereqs-e-g-when-using-invoke-">Managing asynchrony without prereqs (e.g., when using <code>invoke</code>)</h3>
+<p>You can mix sync and async without problems when using normal prereqs, because
+the Jake execution loop takes care of the difference for you. But when you call
+<code>invoke</code> or <code>execute</code>, you have to manage the asynchrony yourself.</p>
+<p>Here's a correct working example:</p>
+<pre><code class="lang-javascript">task(<span class="string">'async1'</span>, [<span class="string">'async2'</span>], {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+    console.log(<span class="string">'-- async1 start ----------------'</span>);
+    setTimeout(<span class="keyword">function</span> () {
+        console.log(<span class="string">'-- async1 done ----------------'</span>);
+        complete();
+    }, <span class="number">1000</span>);
+});
+
+task(<span class="string">'async2'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+    console.log(<span class="string">'-- async2 start ----------------'</span>);
+    setTimeout(<span class="keyword">function</span> () {
+        console.log(<span class="string">'-- async2 done ----------------'</span>);
+        complete();
+    }, <span class="number">500</span>);
+});
+
+task(<span class="string">'init'</span>, [<span class="string">'async1'</span>, <span class="string">'async2'</span>], {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+    console.log(<span class="string">'-- init start ----------------'</span>);
+    setTimeout(<span class="keyword">function</span> () {
+        console.log(<span class="string">'-- init done ----------------'</span>);
+        complete();
+    }, <span class="number">100</span>);
+});
+
+task(<span class="string">'default'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  console.log(<span class="string">'-- default start ----------------'</span>);
+  <span class="keyword">var</span> init = jake.Task.init;
+  init.addListener(<span class="string">'complete'</span>, <span class="keyword">function</span> () {
+    console.log(<span class="string">'-- default done ----------------'</span>);
+    complete();
+  });
+  init.invoke();
+});
+</code></pre>
+<p>You have to declare the &quot;default&quot; task as asynchronous as well, and call
+<code>complete</code> on it when &quot;init&quot; finishes. Here's the output:</p>
+<pre><code>-- <span class="keyword">default</span> start ----------------
+-- async2 start ----------------
+-- async2 done ----------------
+-- async1 start ----------------
+-- async1 done ----------------
+-- init start ----------------
+-- init done ----------------
+-- <span class="keyword">default</span> done ----------------
+</code></pre><p>You get what you expect -- &quot;default&quot; starts, the rest runs, and finally
+&quot;default&quot; finishes.</p>
+<p><a name="tasks_evented_tasks"></a></p>
+<h3 id="evented-tasks">Evented tasks</h3>
+<p>Tasks are EventEmitters. They can fire 'complete' and 'error' events.</p>
+<p>If a task called via <code>invoke</code> is asynchronous, you can set a listener on the
+'complete' event to run any code that depends on it.</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Calls the async foo:baz task and its prerequisites.'</span>);
+task(<span class="string">'invokeFooBaz'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> t = jake.Task[<span class="string">'foo:baz'</span>];
+  t.addListener(<span class="string">'complete'</span>, <span class="keyword">function</span> () {
+    console.log(<span class="string">'Finished executing foo:baz'</span>);
+    <span class="comment">// Maybe run some other code</span>
+    <span class="comment">// ...</span>
+    <span class="comment">// Complete the containing task</span>
+    complete();
+  });
+  <span class="comment">// Kick off foo:baz</span>
+  t.invoke();
+});
+</code></pre>
+<p>If you want to handle the errors in a task in some specific way, you can set a
+listener for the 'error' event, like so:</p>
+<pre><code class="lang-javascript"><span class="keyword">namespace</span>(<span class="string">'vronk'</span>, <span class="keyword">function</span> () {
+  task(<span class="string">'groo'</span>, <span class="keyword">function</span> () {
+    <span class="keyword">var</span> t = jake.Task[<span class="string">'vronk:zong'</span>];
+    t.addListener(<span class="string">'error'</span>, <span class="keyword">function</span> (e) {
+      console.log(e.message);
+    });
+    t.invoke();
+  });
+
+  task(<span class="string">'zong'</span>, <span class="keyword">function</span> () {
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'OMFGZONG'</span>);
+  });
+});
+</code></pre>
+<p>If no specific listener is set for the &quot;error&quot; event, errors are handled by
+Jake's generic error-handling.</p>
+<p><a name="tasks_aborting_a_task"></a></p>
+<h3 id="aborting-a-task">Aborting a task</h3>
+<p>You can abort a task by calling the <code>fail</code> function, and Jake will abort the
+currently running task. You can pass a customized error message to <code>fail</code>:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This task fails.'</span>);
+task(<span class="string">'failTask'</span>, <span class="keyword">function</span> () {
+  fail(<span class="string">'Yikes. Something back happened.'</span>);
+});
+</code></pre>
+<p>You can also pass an optional exit status-code to the fail command, like so:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'This task fails with an exit-status of 42.'</span>);
+task(<span class="string">'failTaskQuestionCustomStatus'</span>, <span class="keyword">function</span> () {
+  fail(<span class="string">'What is the answer?'</span>, <span class="number">42</span>);
+});
+</code></pre>
+<p>The process will exit with a status of 42.</p>
+<p>Uncaught errors will also abort the currently running task.</p>
+<p><a name="tasks_running_prerequisites_in_parallel"></a></p>
+<h3 id="running-prerequisites-in-parallel">Running prerequisites in parallel</h3>
+<p>Jake can run the prerequisites of a task in parallel. This only makes sense when 
+the tasks are asynchronous and do not block NodeJS event loop like executing shell commands. 
+You can enable and limit the number of simultaneous tasks with the <code>parallelLimit</code>
+task option. Because the order in which the tasks executed in parallel will finish
+is not known these tasks <strong>cannot</strong> call the global <code>complete</code> function. Instead they
+<strong>must</strong> finish the specific task either by calling <code>task.complete()</code>  or <code>complete(task)</code></p>
+<p>The folowing example uses <code>setTimout</code> to finish two tasks out of order. The entire task takes 550ms to complete :</p>
+<pre><code class="lang-javascript">task(&quot;A&quot;, {async: <span class="keyword">true</span>}, <span class="keyword">function</span>() {
+  console.log(&quot;Started A&quot;);
+  <span class="keyword">var</span> task = <span class="keyword">this</span>;
+  setTimeout(<span class="keyword">function</span>() {
+    console.log(&quot;Finished A&quot;);
+    task.complete();
+  }, <span class="number">500</span>);
+});
+task(&quot;B&quot;, {async: <span class="keyword">true</span>}, <span class="keyword">function</span>() {
+  console.log(&quot;Started B&quot;);
+  <span class="keyword">var</span> task = <span class="keyword">this</span>;
+  setTimeout(<span class="keyword">function</span>() {
+    console.log(&quot;Finished B&quot;);
+    task.complete();
+  },<span class="number">250</span>);
+});
+task(&quot;parallel&quot;, [&quot;A&quot;,&quot;B&quot;], {async: <span class="keyword">true</span>, parallelLimit: <span class="number">2</span>}, <span class="keyword">function</span>() {
+  <span class="keyword">var</span> task = <span class="keyword">this</span>;
+  setTimeout(<span class="keyword">function</span>() {
+    task.complete();
+  },<span class="number">50</span>);
+});
+</code></pre>
+<p><a name="tasks_showing_the_list_of_tasks"></a></p>
+<h3 id="showing-the-list-of-tasks">Showing the list of tasks</h3>
+<p>Passing <code>jake</code> the -T or --tasks flag will display the full list of tasks
+available in a Jakefile, along with their descriptions:</p>
+<pre><code>$ jake -T
+jake <span class="keyword">default</span>       <span class="comment"># This is the default task.</span>
+jake asdf          <span class="comment"># This is the asdf task.</span>
+jake concat.txt    <span class="comment"># File task, concatenating two files together</span>
+jake failure       <span class="comment"># Failing task.</span>
+jake lookup        <span class="comment"># Jake task lookup by name.</span>
+jake foo:bar       <span class="comment"># This the foo:bar task</span>
+jake foo:fonebone  <span class="comment"># This the foo:fonebone task</span>
+</code></pre><p>Setting a value for -T/--tasks will filter the list by that value:</p>
+<pre><code>$ jake -T foo
+jake foo:bar       <span class="comment"># This the foo:bar task</span>
+jake foo:fonebone  <span class="comment"># This the foo:fonebone task</span>
+</code></pre><p>The list displayed will be all tasks whose namespace/name contain
+the filter-string.</p>
+<p>Internally, passing this CLI flag calls
+<code>jake.showAllTaskDescriptions</code>, and passes it the filter -- so
+<code>jake -T foo</code> is equivalent to calling
+<code>jake.showAllTaskDescriptions('foo');</code>.</p>
+<p><a name="breaking_things_up_into_multiple_files"></a></p>
+<h2 id="breaking-things-up-into-multiple-files">Breaking things up into multiple files</h2>
+<p>Jake will automatically look for files with a .jake extension in a 'jakelib'
+directory in your project, and load them (via <code><span class="keyword">require</span></code>) after loading your
+Jakefile. (The directory name can be overridden using the -J/--jakelibdir
+command-line option.)</p>
+<p>This allows you to break your tasks up over multiple files -- a good way to do
+it is one namespace per file: e.g., a <code>zardoz</code> namespace full of tasks in
+'jakelib/zardox.jake'.</p>
+<p>Note that these .jake files each run in their own module-context, so they don't
+have access to each others' data. However, the Jake API methods, and the
+task-hierarchy are globally available, so you can use tasks in any file as
+prerequisites for tasks in any other, just as if everything were in a single
+file.</p>
+<p>Environment-variables set on the command-line are likewise also naturally
+available to code in all files via process.env.</p>
+<p><a name="file-utils"></a></p>
+<h2 id="file-utils">File-utils</h2>
+<p>Since shelling out in Node is an asynchronous operation, Jake comes with a few
+useful file-utilities with a synchronous API, that make scripting easier.</p>
+<p>The <code>jake.mkdirP</code> utility recursively creates a set of nested directories. It
+will not throw an error if any of the directories already exists. Here's an example:</p>
+<pre><code class="lang-javascript">jake.mkdirP('app/views/layouts');
+</code></pre>
+<p>The <code>jake.cpR</code> utility does a recursive copy of a file or directory. It takes
+two arguments, the file/directory to copy, and the destination. Note that this
+command can only copy files and directories; it does not perform globbing (so
+arguments like '*.txt' are not possible).</p>
+<pre><code class="lang-javascript">jake.cpR(path.join(sourceDir, '/templates'), currentDir);
+</code></pre>
+<p>This would copy 'templates' (and all its contents) into <code>currentDir</code>.</p>
+<p>The <code>jake.readdirR</code> utility gives you a recursive directory listing, giving you
+output somewhat similar to the Unix <code>find</code> command. It only works with a
+directory name, and does not perform filtering or globbing.</p>
+<pre><code class="lang-javascript">jake.readdirR('pkg');
+</code></pre>
+<p>This would return an array of filepaths for all files in the 'pkg' directory,
+and all its subdirectories.</p>
+<p>The <code>jake.rmRf</code> utility recursively removes a directory and all its contents.</p>
+<pre><code class="lang-javascript">jake.rmRf('pkg');
+</code></pre>
+<p>This would remove the 'pkg' directory, and all its contents.</p>
+<p><a name="running_shell-commands:_`jakeexec`_and_`jake.create_exec`"></a></p>
+<h2 id="running-shell-commands-jake-exec-and-jake-createexec-">Running shell-commands: <code>jake.exec</code> and <code>jake.createExec</code></h2>
+<p>Jake also provides a more general utility function for running a sequence of
+shell-commands.</p>
+<p><a name="running_shell-commands:_`jakeexec`_and_`jake.create_exec`_`jakeexec`"></a></p>
+<h3 id="-jake-exec-"><code>jake.exec</code></h3>
+<p>The <code>jake.exec</code> command takes an array of shell-command strings, and an optional
+callback to run after completing them. Here's an example from Jake's Jakefile,
+that runs the tests:</p>
+<pre><code class="lang-javascript">desc(<span class="string">'Runs the Jake tests.'</span>);
+task(<span class="string">'test'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> cmds = [
+    <span class="string">'node ./tests/parseargs.js'</span>
+  , <span class="string">'node ./tests/task_base.js'</span>
+  , <span class="string">'node ./tests/file_task.js'</span>
+  ];
+  jake.exec(cmds, {printStdout: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+    console.log(<span class="string">'All tests passed.'</span>);
+    complete();
+  });
+
+desc(<span class="string">'Runs some apps in interactive mode.'</span>);
+task(<span class="string">'interactiveTask'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> cmds = [
+    <span class="string">'node'</span> <span class="comment">// Node console</span>
+  , <span class="string">'vim'</span> <span class="comment">// Open Vim</span>
+  ];
+  jake.exec(cmds, {interactive: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+    complete();
+  });
+});
+</code></pre>
+<p>It also takes an optional options-object, with the following options:</p>
+<ul>
+<li><p><code>interactive</code> (tasks are interactive, trumps printStdout and
+ printStderr below, default false)</p>
+</li>
+<li><p><code>printStdout</code> (print to stdout, default false)</p>
+</li>
+<li><p><code>printStderr</code> (print to stderr, default false)</p>
+</li>
+<li><p><code>breakOnError</code> (stop execution on error, default true)</p>
+</li>
+</ul>
+<p>This command doesn't pipe input between commands -- it's for simple execution.</p>
+<p><a name="running_shell-commands:_`jakeexec`_and_`jake.create_exec`_`jakecreate_exec`_and_the_evented__exec_object"></a></p>
+<h3 id="-jake-createexec-and-the-evented-exec-object"><code>jake.createExec</code> and the evented Exec object</h3>
+<p>Jake also provides an evented interface for running shell commands. Calling
+<code>jake.createExec</code> returns an instance of <code>jake.Exec</code>, which is an <code>EventEmitter</code>
+that fires events as it executes commands.</p>
+<p>It emits the following events:</p>
+<ul>
+<li><p>'cmdStart': When a new command begins to run. Passes one arg, the command
+being run.</p>
+</li>
+<li><p>'cmdEnd': When a command finishes. Passes one arg, the command
+being run.</p>
+</li>
+<li><p>'stdout': When the stdout for the child-process receives data. This streams
+the stdout data. Passes one arg, the chunk of data. (When using the printStdout
+option, these events are not available as the stdout of the child process is
+inherited directly from the current process.)</p>
+</li>
+<li><p>'stderr': When the stderr for the child-process receives data. This streams
+the stderr data. Passes one arg, the chunk of data. (When using the printStderr
+option, these events are not available as the stderr of the child process is
+inherited directly from the current process.)</p>
+</li>
+<li><p>'error': When a shell-command exits with a non-zero status-code. Passes two
+args -- the error message, and the status code. If you do not set an error
+handler, and a command exits with an error-code, Jake will throw the unhandled
+error. If <code>breakOnError</code> is set to true, the Exec object will emit and 'error'
+event after the first error, and stop any further execution.</p>
+</li>
+</ul>
+<p>To begin running the commands, you have to call the <code>run</code> method on it. It also
+has an <code>append</code> method for adding new commands to the list of commands to run.</p>
+<p>Here's an example:</p>
+<pre><code class="lang-javascript">var ex = jake.createExec(['do_thing.sh']);
+ex.addListener('error', function (msg, code) {
+  if (code == 127) {
+    console.log(&quot;Couldn't find do_thing script, trying do_other_thing&quot;);
+    ex.append('do_other_thing.sh');
+  }
+  else {
+    fail('Fatal error: ' + msg, code);
+  }
+});
+ex.run();
+</code></pre>
+<p>Using the evented Exec object gives you a lot more flexibility in running shell
+commmands. But if you need something more sophisticated, Procstreams
+(<a href="https://github.com/polotek/procstreams">https://github.com/polotek/procstreams</a>) might be a good option.</p>
+<p><a name="logging_and_output"></a></p>
+<h2 id="logging-and-output">Logging and output</h2>
+<p>Using the -q/--quiet flag at the command-line will stop Jake from sending its
+normal output to standard output. Note that this only applies to built-in output
+from Jake; anything you output normally from your tasks will still be displayed.</p>
+<p>If you want to take advantage of the -q/--quiet flag in your own programs, you
+can use <code>jake.logger.log</code> and <code>jake.logger.error</code> for displaying output. These
+two commands will respect the flag, and suppress output correctly when the
+quiet-flag is on.</p>
+<p>You can check the current value of this flag in your own tasks by using
+<code>jake.program.opts.quiet</code>. If you want the output of a <code>jake.exec</code> shell-command
+to respect the quiet-flag, set your <code>printStdout</code> and <code>printStderr</code> options to
+false if the quiet-option is on:</p>
+<pre><code class="lang-javascript">task(<span class="string">'echo'</span>, {async: <span class="keyword">true</span>}, <span class="keyword">function</span> () {
+  jake.exec([<span class="string">'echo &quot;hello&quot;'</span>], <span class="keyword">function</span> () {
+    jake.logger.log(<span class="string">'Done.'</span>);
+    complete();
+  }, {printStdout: !jake.program.opts.quiet});
+});
+</code></pre>
+<p><a name="file_list"></a></p>
+<h2 id="filelist">FileList</h2>
+<p>Jake's FileList takes a list of glob-patterns and file-names, and lazy-creates a
+list of files to include. Instead of immediately searching the filesystem to
+find the files, a FileList holds the pattern until it is actually used.</p>
+<p>When any of the normal JavaScript Array methods (or the <code>toArray</code> method) are
+called on the FileList, the pending patterns are resolved into an actual list of
+file-names. FileList uses the <a href="https://github.com/isaacs/minimatch">minimatch</a> module.</p>
+<p>To build the list of files, use FileList's <code><span class="keyword">include</span></code> and <code>exclude</code> methods:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> <span class="keyword">list</span> = <span class="keyword">new</span> jake.FileList();
+<span class="keyword">list</span>.<span class="keyword">include</span>(<span class="string">'foo/*.txt'</span>);
+<span class="keyword">list</span>.<span class="keyword">include</span>([<span class="string">'bar/*.txt'</span>, <span class="string">'README.md'</span>]);
+<span class="keyword">list</span>.<span class="keyword">include</span>(<span class="string">'Makefile'</span>, <span class="string">'package.json'</span>);
+<span class="keyword">list</span>.exclude(<span class="string">'foo/zoobie.txt'</span>);
+<span class="keyword">list</span>.exclude(/foo\/src.*.txt/);
+console.log(<span class="keyword">list</span>.toArray());
+</code></pre>
+<p>The <code><span class="keyword">include</span></code> method can be called either with an array of items, or multiple
+single parameters. Items can be either glob-patterns, or individual file-names.</p>
+<p>The <code>exclude</code> method will prevent files from being included in the list. These
+files must resolve to actual files on the filesystem. It can be called either
+with an array of items, or multiple single parameters. Items can be
+glob-patterns, individual file-names, string-representations of
+regular-expressions, or regular-expression literals.</p>
+<p><a name="package_task"></a></p>
+<h2 id="packagetask">PackageTask</h2>
+<p>When you create a PackageTask, it programmatically creates a set of tasks for
+packaging up your project for distribution. Here's an example:</p>
+<pre><code class="lang-javascript">packageTask(<span class="string">'fonebone'</span>, <span class="string">'v0.1.2112'</span>, <span class="keyword">function</span> () {
+  <span class="keyword">var</span> fileList = [
+    <span class="string">'Jakefile'</span>
+  , <span class="string">'README.md'</span>
+  , <span class="string">'package.json'</span>
+  , <span class="string">'lib/*'</span>
+  , <span class="string">'bin/*'</span>
+  , <span class="string">'tests/*'</span>
+  ];
+  <span class="keyword">this</span>.packageFiles.<span class="keyword">include</span>(fileList);
+  <span class="keyword">this</span>.needTarGz = <span class="keyword">true</span>;
+  <span class="keyword">this</span>.needTarBz2 = <span class="keyword">true</span>;
+});
+</code></pre>
+<p>This will automatically create a 'package' task that will assemble the specified
+files in 'pkg/fonebone-v0.1.2112,' and compress them according to the specified
+options. After running <code>jake package</code>, you'll have the following in pkg/:</p>
+<pre><code>fonebone-v0.1.2112
+fonebone-v0.1.2112.tar.bz2
+fonebone-v0.1.2112.tar.gz
+</code></pre><p>PackageTask also creates a 'clobber' task that removes the pkg/
+directory.</p>
+<p><a name="package_task_package_task_instance-property_options"></a></p>
+<h3 id="packagetask-instance-property-options">PackageTask instance-property options</h3>
+<ul>
+<li><code>name</code> {String} The name of the project</li>
+<li><code>version</code> {String} The project version-string</li>
+<li><code>prereqs</code> {Array} Tasks to run before packaging</li>
+<li><code>packageDir</code> {String='pkg'} The directory-name to use for packaging the software</li>
+<li><code>packageFiles</code> {jake.FileList} The list of files and directories to include in the package-archive</li>
+<li><code>needTar</code> {Boolean=false} If set to true, uses the <code>tar</code> utility to create a gzip .tgz archive of the package</li>
+<li><code>needTarGz</code> {Boolean=false} If set to true, uses the <code>tar</code> utility to create a gzip .tar.gz archive of the package</li>
+<li><code>needTarBz2</code> If set to true, uses the <code>tar</code> utility to create a bzip2 .bz2 archive of the package</li>
+<li><code>needJar</code> {Boolean=false} If set to true, uses the <code>jar</code> utility to create a .jar archive of the package</li>
+<li><code>needZip</code> {Boolean=false} If set to true, uses the <code>zip</code> utility to create a .zip archive of the package</li>
+<li><code>manifestFile</code> {String=null} Can be set to point the <code>jar</code> utility at a manifest file to use in a .jar archive. If unset, one will be automatically created by the <code>jar</code> utility. This path should be relative to the root of the package directory (this.packageDir above, likely 'pkg')</li>
+<li><code>tarCommand</code> {String='tar'} The shell-command to use for creating tar archives.</li>
+<li><code>jarCommand</code> {String='jar'} The shell-command to use for creating jar archives.</li>
+<li><code>zipCommand</code> {String='zip'} The shell-command to use for creating zip archives.</li>
+<li><code>archiveNoBaseDir</code> {Boolean=false} Simple option for performing the archive on the contents of the directory instead of the directory itself</li>
+<li><code>archiveChangeDir</code> {String=null} Equivalent to the '-C' command for the <code>tar</code> and <code>jar</code> commands. (&quot;Change to this directory before adding files.&quot;)</li>
+<li><code>archiveContentDir</code> {String=null} Specifies the files and directories to include in the package-archive. If unset, this will default to the main package directory -- i.e., name + version.</li>
+</ul>
+<p><a name="package_task_windows-specific_warning"></a></p>
+<h3 id="windows-specific-warning">Windows-specific warning</h3>
+<p>In a windows environment tar will fail unless you have manually added some form of
+tar compatible executable on your path, you can specify the <code>tarCommand</code> if needed 
+to use a different executable on the path to achieve the same result.</p>
+<p><a name="test_task"></a></p>
+<h2 id="testtask">TestTask</h2>
+<p>When you create a TestTask, it programmatically creates a simple task for running
+tests for your project. The first argument of the constructor is the
+project-name (used in the description of the task), the second (optional)
+argument is a list of prerequisite tasks to run before the tests, and the final
+argument is a function that defines the task. It allows you to specify what
+files to run as tests, and what to name the task that gets created (defaults to
+&quot;test&quot; if unset).</p>
+<pre><code class="lang-javascript">testTask(<span class="string">'fonebone'</span>, [<span class="string">'asdf'</span>, <span class="string">'qwer'</span>], <span class="keyword">function</span> () {
+  <span class="keyword">var</span> fileList = [
+    <span class="string">'tests/*'</span>
+  , <span class="string">'lib/adapters/**/test.js'</span>
+  ];
+  <span class="keyword">this</span>.testFiles.<span class="keyword">include</span>(fileList);
+  <span class="keyword">this</span>.testFiles.exclude(<span class="string">'tests/helper.js'</span>);
+  <span class="keyword">this</span>.testName = <span class="string">'testMainAndAdapters'</span>;
+});
+</code></pre>
+<p>Tests in the specified file should be in the very simple format of
+test-functions hung off the export. These tests are converted into Jake tasks
+which Jake then runs normally.</p>
+<p>If a test needs to run asynchronously, simply define the test-function with a
+single argument, a callback. Jake will define this as an asynchronous task, and
+will wait until the callback is called in the test function to run the next test.</p>
+<p>If you name your test 'before', it will run before any of the other tests you
+export. You can use it for test-setup. If you name a test 'after', it will run
+after all the other tests have finished. You can use it for teardown. The
+'before' and 'after' will only run once per test module -- <em>not</em> before and
+after each test.</p>
+<p>If you name your test 'beforeEach', it will run before each test. You can also
+name a test 'afterEach' for a test that runs after each test.</p>
+<p>Here's an example test-file:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> assert = <span class="keyword">require</span>(<span class="string">'assert'</span>)
+  , tests;
+
+tests = {
+  <span class="string">'before'</span>: <span class="keyword">function</span> () {
+    <span class="comment">// Do some setup here</span>
+  }
+, <span class="string">'after'</span>: <span class="keyword">function</span> () {
+    <span class="comment">// Do some teardown here</span>
+  }
+, <span class="string">'beforeEach'</span>: <span class="keyword">function</span> () {
+    <span class="comment">// Something to do before every test</span>
+  }
+, <span class="string">'afterEach'</span>: <span class="keyword">function</span> () {
+    <span class="comment">// Something to do after every test</span>
+  }
+, <span class="string">'sync test'</span>: <span class="keyword">function</span> () {
+    <span class="comment">// Assert something</span>
+    assert.ok(<span class="keyword">true</span>);
+  }
+, <span class="string">'async test'</span>: <span class="keyword">function</span> (next) {
+    <span class="comment">// Assert something else</span>
+    assert.ok(<span class="keyword">true</span>);
+    <span class="comment">// Won't go next until this is called</span>
+    next();
+  }
+, <span class="string">'another sync test'</span>: <span class="keyword">function</span> () {
+    <span class="comment">// Assert something else</span>
+    assert.ok(<span class="keyword">true</span>);
+  }
+};
+
+module.exports = tests;
+</code></pre>
+<p>Jake's tests are also a good example of use of a TestTask.</p>
+<p><a name="watch_task"></a></p>
+<h2 id="watchtask">WatchTask</h2>
+<p>When you create a WatchTask, it will watch a directory of files for changes, and
+run a task or set of tasks anytime there's a change.</p>
+<pre><code class="lang-javascript"><span class="comment">// Assumes there's an 'assets' task, creates a task called 'watch'</span>
+watchTask(<span class="string">'watch'</span>, [<span class="string">'assets'</span>], <span class="keyword">function</span> () {
+  <span class="keyword">this</span>.watchFiles.<span class="keyword">include</span>([
+    <span class="string">'./**/*.ejs'</span>
+  ]);
+});
+</code></pre>
+<p>Run <code>jake &lt;task name&gt;</code> to start up the WatchTask.</p>
+<p>By default, it will watch the current directory for these files:</p>
+<pre><code class="lang-javascript">[ './**/*.js'
+, './**/*.coffee'
+, './**/*.ls'
+, './**/*.css'
+, './**/*.less'
+, './**/*.scss'
+]
+</code></pre>
+<p>By default, it will exclude these files:</p>
+<pre><code class="lang-javascript">[ 'node_modules/**'
+, '.git/**'
+]
+</code></pre>
+<p>The list of watched files is in a FileList, with the normal <code><span class="keyword">include</span></code>/<code>exclude</code>
+API.</p>
+<p><a name="publish_task"></a></p>
+<h2 id="publishtask">PublishTask</h2>
+<p>The PublishTask builds on top of PackageTask to allow you to do a version
+bump of your project, package it, and publish it to NPM (or
+somewhere else). Define the task with your project's name, and
+call <code><span class="keyword">include</span></code>/<code>exclude</code> on the <code>packageFiles</code> FileList to create
+the list of files you want packaged and published to NPM. You can
+also pass a list of prerequisite tasks to run before defining
+tasks for publishing.</p>
+<p>Here's an example from Jake's Jakefile:</p>
+<pre><code class="lang-javascript">publishTask(<span class="string">'foo'</span>, [<span class="string">'bar'</span>, <span class="string">'baz'</span>], <span class="keyword">function</span> () {
+  <span class="keyword">this</span>.packageFiles.<span class="keyword">include</span>([
+    <span class="string">'Makefile'</span>
+  , <span class="string">'Jakefile'</span>
+  , <span class="string">'README.md'</span>
+  , <span class="string">'package.json'</span>
+  , <span class="string">'lib/**'</span>
+  , <span class="string">'bin/**'</span>
+  , <span class="string">'test/**'</span>
+    ]);
+  <span class="keyword">this</span>.packageFiles.exclude([
+    <span class="string">'test/tmp'</span>
+  ]);
+});
+</code></pre>
+<p>The PublishTask will automatically create a <code>publish</code> task which performs the
+following steps:</p>
+<ol>
+<li>Bump the version number in your package.json</li>
+<li>Commit change in git, push it to GitHub</li>
+<li>Create a git tag for the version</li>
+<li>Push the tag to GitHub</li>
+<li>Package the new version of your project</li>
+<li>Publish it to NPM</li>
+<li>Clean up the package</li>
+</ol>
+<p>If you want to publish to a private NPM repository, you can specify a custom publishing command:</p>
+<pre><code class="lang-javascript">npmPublishTask(<span class="string">'zerb'</span>, <span class="keyword">function</span> () {
+  <span class="keyword">this</span>.packageFiles.<span class="keyword">include</span>([
+  , <span class="string">'index.js'</span>
+  , <span class="string">'package.json'</span>
+    ]);
+
+  <span class="comment">// Publishes using the gemfury cli</span>
+  <span class="comment">// `%filename` will be replaced with the package filename</span>
+  <span class="keyword">this</span>.publishCmd = <span class="string">'fury push %filename'</span>;
+});
+</code></pre>
+<p><a name="coffee_script__jakefiles"></a></p>
+<h2 id="coffeescript-jakefiles">CoffeeScript Jakefiles</h2>
+<p>Jake can also handle Jakefiles in CoffeeScript. Be sure to make it
+Jakefile.coffee so Jake knows it's in CoffeeScript.</p>
+<p>Here's an example:</p>
+<pre><code class="lang-coffeescript">util = <span class="keyword">require</span>(<span class="string">'util'</span>)
+
+desc <span class="string">'This is the default task.'</span>
+task <span class="string">'default'</span>, (params) -&gt;
+  console.log <span class="string">'Ths is the default task.'</span>
+  console.log(util.inspect(arguments))
+  jake.Task[<span class="string">'new'</span>].invoke []
+
+task <span class="string">'new'</span>, -&gt;
+  console.log <span class="string">'ello from new'</span>
+  jake.Task[<span class="string">'foo:next'</span>].invoke [<span class="string">'param'</span>]
+
+<span class="keyword">namespace</span> <span class="string">'foo'</span>, -&gt;
+  task <span class="string">'next'</span>, (param) -&gt;
+    console.log <span class="string">'ello from next with param: '</span> + param
+</code></pre>
+<p><a name="live_script__jakefiles"></a></p>
+<h2 id="livescript-jakefiles">LiveScript Jakefiles</h2>
+<p>Jake can also handle Jakefiles in LiveScript. Be sure to make it Jakefile.ls so Jake knows it's in LiveScript.</p>
+<p>Here's an example:</p>
+<pre><code class="lang-livescript"><span class="keyword">require</span>! \util
+
+desc <span class="string">'This is the default task.'</span>
+task \<span class="keyword">default</span>, (params) !-&gt;
+  console.log <span class="string">'This is the default task.'</span>
+  console.log (util.inspect arguments)
+  jake.Task[\<span class="keyword">new</span>].invoke []
+
+task \<span class="keyword">new</span> !-&gt;
+  console.log <span class="string">'ello from new'</span>
+  jake.Task[\foo:next].invoke [\param]
+
+<span class="keyword">namespace</span> \foo -&gt;
+  task \next (param) !-&gt;
+    console.log &quot;ello from next with param: <span class="comment">#param&quot;</span>
+</code></pre>
+<p><a name="related_projects"></a></p>
+<h2 id="related-projects">Related projects</h2>
+<p>James Coglan's &quot;Jake&quot;: <a href="http://github.com/jcoglan/jake">http://github.com/jcoglan/jake</a></p>
+<p>Confusingly, this is a Ruby tool for building JavaScript packages from source code.</p>
+<p>280 North's Jake: <a href="http://github.com/280north/jake">http://github.com/280north/jake</a></p>
+<p>This is also a JavaScript port of Rake, which runs on the Narwhal platform.</p>
+<p><a name="license"></a></p>
+<h2 id="license">License</h2>
+<p>Licensed under the Apache License, Version 2.0
+(<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
+
+</div>
+
+
+        </div>
+        <div class="span1"></div>
+      </div>
+
+
+    </div>
+  </body>
+</html>
+
+
+
+
